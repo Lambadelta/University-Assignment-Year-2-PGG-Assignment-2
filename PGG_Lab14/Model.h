@@ -4,6 +4,7 @@
 #include "glew.h"
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
+#include "Shader.h"
 
 class Model
 {
@@ -30,8 +31,7 @@ protected:
 	glm::mat4 ProjectionMatrix;
 
 	GLuint VAO;
-	GLuint Program;
-	GLuint ShaderMMLocation, ShaderVMLocation, ShaderPMLocation;
+	Shader shader;
 
 	unsigned int numVerts;
 };

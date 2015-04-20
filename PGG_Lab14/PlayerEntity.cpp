@@ -3,8 +3,6 @@
 PlayerEntity::PlayerEntity() : Model()
 {
 	VAO = 0;
-	Program = 0;
-	ShaderMMLocation = ShaderPMLocation = ShaderVMLocation = 0;
 	numVerts = 0;
 
 	initVAO();
@@ -17,15 +15,15 @@ PlayerEntity::~PlayerEntity()
 
 void PlayerEntity::draw()
 {
-	glUseProgram(Program);
+	glUseProgram(shader.getProgram());
 
 	// Activate the VAO
 	glBindVertexArray(VAO);
 
 		// Send matrices to the shader as uniforms
-		glUniformMatrix4fv(ShaderMMLocation, 1, GL_FALSE, glm::value_ptr(ModelMatrix));
-		glUniformMatrix4fv(ShaderVMLocation, 1, GL_FALSE, glm::value_ptr(ViewMatrix));
-		glUniformMatrix4fv(ShaderPMLocation, 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+		glUniformMatrix4fv(shader.getShaderMM(), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+		glUniformMatrix4fv(shader.getShaderVM(), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+		glUniformMatrix4fv(shader.getShaderPM(), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 
 	glDrawArrays(GL_TRIANGLES, 0, numVerts);
 
