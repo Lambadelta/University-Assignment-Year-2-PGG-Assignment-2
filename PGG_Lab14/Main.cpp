@@ -134,9 +134,14 @@ int main(int argc, char *argv[])
 	glEnable(GL_DEPTH_TEST);
 
 	// Create a model
-	GameModel *myObject = new GameModel();
+	//GameModel *myObject = new GameModel();
 	// Set object's position like this:
-	myObject->SetPosition(0,0,0);
+	//myObject->SetPosition(0,0,0);
+	PlayerEntity Test;
+	Loader test;
+	Test.setMeshObject(test.packageModelObject("teapot.obj"));
+	Test.initVAO();
+	Test.setPosition(0.0f, 0.0f, 0.0f);
 
 
 	// We are now preparing for our main loop (also known as the 'game loop')
@@ -223,14 +228,15 @@ int main(int argc, char *argv[])
 		lastTime = current;
 		
 		// Update the model, to make it rotate
-		myObject->Update( deltaTs );
+		//myObject->Update( deltaTs );
+		Test.update(deltaTs);
 
 
 
 		// Draw our world
 
 		// Specify the colour to clear the framebuffer to
-		glClearColor(0.0f,0.0f,0.0f,0.0f);
+		glClearColor(1.0f,1.0f,1.0f,0.0f);
 		// This writes the above colour to the colour part of the framebuffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -245,7 +251,8 @@ int main(int argc, char *argv[])
 		glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f) );
 
 		// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
-		myObject->Draw( View, Projection);
+		//myObject->Draw( View, Projection);
+		Test.draw(View, Projection);
 
 
 		// This tells the renderer to actually show its contents to the screen

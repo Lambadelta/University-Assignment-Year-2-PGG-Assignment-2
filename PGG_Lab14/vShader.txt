@@ -2,10 +2,10 @@
 layout(location = 0) in vec4 vPosition;
 layout(location = 1) in vec3 vNormalIn;
 
-uniform mat4 modelMat;\n\
-uniform mat4 invModelMat;\n\
-uniform mat4 viewMat;\n\
-uniform mat4 projMat;\n\
+uniform mat4 modelMat;
+uniform mat4 invModelMat;
+uniform mat4 viewMat;
+uniform mat4 projMat;
 
 uniform vec4 worldSpaceLightPos = {1,0.8,1,1};
 
@@ -22,4 +22,4 @@ void main()
 		lightDirV =  normalize( vec3(eyeSpaceLightPos) - vec3(eyeSpaceVertPos) );
 		
 		vNormalV = mat3(viewMat * modelMat) * vNormalIn;
-}"
+}

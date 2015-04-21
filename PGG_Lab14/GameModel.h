@@ -6,6 +6,7 @@
 #include <SDL.h>
 #include "glew.h"
 #include "Loader.h"
+#include "PlayerEntity.h"
 
 /// Class to store and display a model
 class GameModel

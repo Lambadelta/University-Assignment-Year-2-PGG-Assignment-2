@@ -33,8 +33,10 @@ bool Shader::CheckShaderCompiled(GLint shader)
 
 void Shader::initShader()
 {
-	vShaderText = ReadShaderFile("vShader.txt");
-	fShaderText = ReadShaderFile("fShader.txt");
+	vshaderText = ReadShaderFile("vShader.txt");
+	vShaderText = vshaderText.c_str();
+	fshaderText = ReadShaderFile("fShader.txt");
+	fShaderText = fshaderText.c_str();
 	Program = glCreateProgram();
 	// Create the vertex shader
 	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
@@ -86,9 +88,8 @@ void Shader::initShader()
 	ShaderPMLocation = glGetUniformLocation(Program, "projMat");
 
 }
-}
 
-GLchar* Shader::ReadShaderFile(std::string PATH)
+std::string Shader::ReadShaderFile(std::string PATH)
 {
 	std::string content;
 	std::ifstream fileStream(PATH, std::ios::in);
@@ -99,12 +100,14 @@ GLchar* Shader::ReadShaderFile(std::string PATH)
 	}
 
 	std::string line = "";
-	while (!fileStream.eof()) {
+
+	while (!fileStream.eof())
+	{
 		std::getline(fileStream, line);
 		content.append(line + "\n");
 	}
-	GLchar* shader = content.c_str;
+//	const GLchar* shader = content.c_str();
 
 	fileStream.close();
-	return shader;
+	return content;
 }

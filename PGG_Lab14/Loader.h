@@ -7,6 +7,7 @@
 #include <vector>
 #include "glm.hpp"
 #include "FaceVertex.h"
+#include "Object.h"
 
 class Loader
 {
@@ -17,6 +18,8 @@ public:
 	void BuildMeshVertAndNormalLists();
 	std::vector<float>& getVerts(){ return mVerts; }
 	std::vector<float>& getNormals(){ return mNormals; }
+	Object packageModelObject(std::string);
+
 
 	
 

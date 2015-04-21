@@ -5,7 +5,7 @@ PlayerEntity::PlayerEntity() : Model()
 	VAO = 0;
 	numVerts = 0;
 
-	initVAO();
+	//initVAO();
 }
 
 PlayerEntity::~PlayerEntity()
@@ -13,17 +13,16 @@ PlayerEntity::~PlayerEntity()
 
 }
 
-void PlayerEntity::draw()
+void PlayerEntity::draw(glm::mat4& VMatrix, glm::mat4& PMatrix)
 {
 	glUseProgram(shader.getProgram());
 
 	// Activate the VAO
 	glBindVertexArray(VAO);
-
 		// Send matrices to the shader as uniforms
 		glUniformMatrix4fv(shader.getShaderMM(), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
-		glUniformMatrix4fv(shader.getShaderVM(), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
-		glUniformMatrix4fv(shader.getShaderPM(), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
+		glUniformMatrix4fv(shader.getShaderVM(), 1, GL_FALSE, glm::value_ptr(VMatrix));
+		glUniformMatrix4fv(shader.getShaderPM(), 1, GL_FALSE, glm::value_ptr(PMatrix));
 
 	glDrawArrays(GL_TRIANGLES, 0, numVerts);
 
@@ -33,7 +32,7 @@ void PlayerEntity::draw()
 	glUseProgram(0);
 }
 
-void PlayerEntity::update()
+void PlayerEntity::update(float dt)
 {
 	ModelMatrix = glm::translate(glm::mat4(1.0F), Position);
 	ModelMatrix = glm::rotate(ModelMatrix, Rotation.y, glm::vec3(0, 1, 0));
@@ -61,5 +60,7 @@ void PlayerEntity::initVAO()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+	numVerts = Mesh.Verts.size();
+	shader.initShader();
 
 }

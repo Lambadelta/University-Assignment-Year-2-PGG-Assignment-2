@@ -12,13 +12,12 @@ public:
 	Model();
 	virtual ~Model(){};
 
-	virtual void draw() = 0;
-	virtual void update() = 0;
+	virtual void draw(glm::mat4&, glm::mat4&) = 0;
+	virtual void update(float) = 0;
 	virtual void initVAO() = 0;
-	virtual void setPosition() = 0;
-
+	virtual void setPosition(float, float, float) = 0;
+	Shader getShader(){ return shader; };
 	Object getMesh(){ return Mesh; };
-
 
 protected:
 	Object Mesh;

@@ -12,7 +12,7 @@ public:
 	~Shader();
 	bool CheckShaderCompiled(GLint);
 	void initShader();
-	GLchar* ReadShaderFile(std::string);
+	std::string ReadShaderFile(std::string);
 	GLuint& getProgram(){ return Program; };
 	GLuint& getShaderMM(){ return ShaderMMLocation; };
 	GLuint& getShaderVM(){ return ShaderPMLocation; };
@@ -23,6 +23,8 @@ private:
 	const GLchar *fShaderText;
 	GLuint Program;
 	GLuint ShaderMMLocation, ShaderVMLocation, ShaderPMLocation;
+	std::string vshaderText;
+	std::string fshaderText;
 
 };
 
