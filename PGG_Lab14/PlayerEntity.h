@@ -16,6 +16,7 @@ public:
 	void setMeshObject(Object Mesh){ this->Mesh = Mesh; };
 	
 private:
+
 };
 
 #endif

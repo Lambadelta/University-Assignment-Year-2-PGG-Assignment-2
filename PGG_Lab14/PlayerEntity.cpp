@@ -32,8 +32,13 @@ void PlayerEntity::draw(glm::mat4& VMatrix, glm::mat4& PMatrix)
 
 void PlayerEntity::update(float dt)
 {
+	Rotation.y += dt * 0.5f;
+	while (Rotation.y > (3.14159265358979323846 * 2.0))
+	{
+		Rotation.y -= (3.14159265358979323846 * 2.0);
+	}
 	ModelMatrix = glm::translate(glm::mat4(1.0F), Position);
-	ModelMatrix = glm::rotate(ModelMatrix, Rotation.y, glm::vec3(0, 1, 0));
+	ModelMatrix = glm::rotate(ModelMatrix, Rotation.y, glm::vec3(1, 1, 0));
 }
 
 void PlayerEntity::initVAO()

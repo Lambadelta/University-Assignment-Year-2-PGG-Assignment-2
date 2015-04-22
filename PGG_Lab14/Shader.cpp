@@ -4,8 +4,6 @@ Shader::Shader()
 {
 	Program = 0;
 	ShaderMMLocation = ShaderPMLocation = ShaderVMLocation = 0;
-	vShaderText = nullptr;
-	fShaderText = nullptr;
 }
 
 Shader::~Shader()
@@ -35,10 +33,12 @@ bool Shader::CheckShaderCompiled(GLint shader)
 
 void Shader::initShader()
 {
+	std::string vshaderText;
+	std::string fshaderText;
 	vshaderText = ReadShaderFile("vShader.txt");
-	vShaderText = vshaderText.c_str();
+	const GLchar* vShaderText = vshaderText.c_str();
 	fshaderText = ReadShaderFile("fShader.txt");
-	fShaderText = fshaderText.c_str();
+	const GLchar* fShaderText = fshaderText.c_str();
 	Program = glCreateProgram();
 	// Create the vertex shader
 	GLuint vShader = glCreateShader(GL_VERTEX_SHADER);

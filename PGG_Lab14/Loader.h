@@ -13,6 +13,11 @@ class Loader
 {
 public:
 
+
+	void Load(std::string objFileName);
+
+	void ReadObjFileData(FILE* objFile);
+
 	bool objLoader(std::string);
 	FaceVertex ExtractFaceVertexData(std::string&);
 	void BuildMeshVertAndNormalLists();

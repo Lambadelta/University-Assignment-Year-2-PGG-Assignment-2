@@ -19,12 +19,8 @@ public:
 	GLuint& getShaderPM(){ return ShaderVMLocation; };
 
 private:
-	const GLchar *vShaderText;
-	const GLchar *fShaderText;
 	GLuint Program;
 	GLuint ShaderMMLocation, ShaderVMLocation, ShaderPMLocation;
-	std::string vshaderText;
-	std::string fshaderText;
 
 };
 
