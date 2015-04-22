@@ -2,6 +2,8 @@
 
 Shader::Shader()
 {
+	Program = 0;
+	ShaderMMLocation = ShaderPMLocation = ShaderVMLocation = 0;
 	vShaderText = nullptr;
 	fShaderText = nullptr;
 }

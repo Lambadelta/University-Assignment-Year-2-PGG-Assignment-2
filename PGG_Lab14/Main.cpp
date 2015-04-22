@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
 	//myObject->SetPosition(0,0,0);
 	PlayerEntity Test;
 	Loader test;
-	Test.setMeshObject(test.packageModelObject("teapot.obj"));
+	Test.setMeshObject(test.packageModelObject("OrionOBJ.obj"));
 	Test.initVAO();
 	Test.setPosition(0.0f, 0.0f, 0.0f);
 
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 		// Draw our world
 
 		// Specify the colour to clear the framebuffer to
-		glClearColor(1.0f,1.0f,1.0f,0.0f);
+		glClearColor(0.0f,0.0f,0.0f,0.0f);
 		// This writes the above colour to the colour part of the framebuffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
 		// Create a viewing matrix for the camera
 		// Don't forget, this is the opposite of where the camera actually is
 		// You can think of this as moving the world away from the camera
-		glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,0,-2.5f) );
+		glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,-1.0f,-6.0f) );
 
 		// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
 		//myObject->Draw( View, Projection);
