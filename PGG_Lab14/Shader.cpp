@@ -2,8 +2,6 @@
 
 Shader::Shader()
 {
-	Program = 0;
-	ShaderMMLocation = ShaderPMLocation = ShaderVMLocation = 0;
 }
 
 Shader::~Shader()
@@ -31,13 +29,13 @@ bool Shader::CheckShaderCompiled(GLint shader)
 	return true;
 }
 
-void Shader::initShader()
+void Shader::initShader(std::string vS, std::string fS, GLuint& MMLocation, GLuint& VMLocation, GLuint&PMLocation, GLuint& Program)
 {
 	std::string vshaderText;
 	std::string fshaderText;
-	vshaderText = ReadShaderFile("vShader.txt");
+	vshaderText = ReadShaderFile(vS);
 	const GLchar* vShaderText = vshaderText.c_str();
-	fshaderText = ReadShaderFile("fShader.txt");
+	fshaderText = ReadShaderFile(fS);
 	const GLchar* fShaderText = fshaderText.c_str();
 	Program = glCreateProgram();
 	// Create the vertex shader
@@ -85,9 +83,9 @@ void Shader::initShader()
 	// We need to get the location of the uniforms in the shaders
 	// This is so that we can send the values to them from the application
 	// We do this in the following way: 
-	ShaderMMLocation = glGetUniformLocation(Program, "modelMat");
-	ShaderVMLocation = glGetUniformLocation(Program, "viewMat");
-	ShaderPMLocation = glGetUniformLocation(Program, "projMat");
+	MMLocation = glGetUniformLocation(Program, "modelMat");
+	VMLocation = glGetUniformLocation(Program, "viewMat");
+	PMLocation = glGetUniformLocation(Program, "projMat");
 
 }
 

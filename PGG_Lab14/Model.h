@@ -12,10 +12,11 @@ public:
 	Model();
 	virtual ~Model(){};
 
-	virtual void draw(glm::mat4&, glm::mat4&) = 0;
+	void draw(glm::mat4&, glm::mat4&);
 	virtual void update(float) = 0;
-	virtual void initVAO() = 0;
+	void initVAO(std::string, std::string);
 	virtual void setPosition(float, float, float) = 0;
+	void setRotation(float xin, float yin, float zin){ Rotation.x = xin; Rotation.y = yin; Rotation.z = zin; };
 	Shader getShader(){ return shader; };
 	Object getMesh(){ return Mesh; };
 
@@ -31,6 +32,8 @@ protected:
 
 	GLuint VAO;
 	Shader shader;
+	GLuint Program;
+	GLuint 	_shaderModelMatLocation, _shaderViewMatLocation, _shaderProjMatLocation;
 
 	unsigned int numVerts;
 };

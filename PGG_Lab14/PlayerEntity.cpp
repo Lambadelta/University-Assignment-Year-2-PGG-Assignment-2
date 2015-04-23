@@ -1,9 +1,14 @@
 #include "PlayerEntity.h"
 
+float PlayerEntity::fPlayerSpeed = 8.f;
+float PlayerEntity::fRotateSpeed = 1.0f;
+float PlayerEntity::fRotationMax = 0.5f;
+
 PlayerEntity::PlayerEntity() : Model()
 {
 	VAO = 0;
 	numVerts = 0;
+	moveLeft = moveRight = false;
 }
 
 PlayerEntity::~PlayerEntity()
@@ -11,60 +16,38 @@ PlayerEntity::~PlayerEntity()
 
 }
 
-void PlayerEntity::draw(glm::mat4& VMatrix, glm::mat4& PMatrix)
-{
-	glUseProgram(shader.getProgram());
-
-	// Activate the VAO
-	glBindVertexArray(VAO);
-		// Send matrices to the shader as uniforms
-		glUniformMatrix4fv(shader.getShaderMM(), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
-		glUniformMatrix4fv(shader.getShaderVM(), 1, GL_FALSE, glm::value_ptr(VMatrix));
-		glUniformMatrix4fv(shader.getShaderPM(), 1, GL_FALSE, glm::value_ptr(PMatrix));
-
-	glDrawArrays(GL_TRIANGLES, 0, numVerts);
-
-	// Unbind VAO
-	glBindVertexArray(0);
-
-	glUseProgram(0);
-}
 
 void PlayerEntity::update(float dt)
 {
-	Rotation.y += dt * 0.5f;
-	while (Rotation.y > (3.14159265358979323846 * 2.0))
+	if (moveLeft)
 	{
-		Rotation.y -= (3.14159265358979323846 * 2.0);
+		if (Rotation.z > -fRotationMax)
+		{
+			Rotation.z -= fRotateSpeed *dt;
+		}
+		Position.x -= fPlayerSpeed *dt;
+	}
+	if (moveRight)
+	{
+		if (Rotation.z < fRotationMax)
+		{
+			Rotation.z += fRotateSpeed *dt;
+		}
+		Position.x += fPlayerSpeed *dt;
+	}
+	if (!moveLeft && !moveRight)
+	{
+		if (Rotation.z < 0.0f)
+		{
+			Rotation.z += (fRotateSpeed / 2) *dt;
+		}
+		if (Rotation.z > 0.0f)
+		{
+			Rotation.z -= (fRotateSpeed / 2) *dt;
+		}
 	}
 	ModelMatrix = glm::translate(glm::mat4(1.0F), Position);
-	ModelMatrix = glm::rotate(ModelMatrix, Rotation.y, glm::vec3(1, 1, 0));
-}
-
-void PlayerEntity::initVAO()
-{
-	numVerts = Mesh.Verts.size() / 3;
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-		GLuint positionBuffer = 0;
-		glGenBuffers(1, &positionBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVerts * 3, &Mesh.Verts[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(0);
-
-		GLuint normalBuffer = 0;
-		glGenBuffers(1, &normalBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, normalBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVerts * 3, &Mesh.Normals[0], GL_STATIC_DRAW);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glEnableVertexAttribArray(1);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	
-	shader.initShader();
-
+	ModelMatrix = glm::rotate(ModelMatrix, Rotation.y, glm::vec3(0, 1, 0));
+	ModelMatrix = glm::rotate(ModelMatrix, Rotation.x, glm::vec3(1, 0, 0));
+	ModelMatrix = glm::rotate(ModelMatrix, Rotation.z, glm::vec3(0, 0, 1));
 }

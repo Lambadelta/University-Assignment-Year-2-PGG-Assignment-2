@@ -11,16 +11,12 @@ public:
 	Shader();
 	~Shader();
 	bool CheckShaderCompiled(GLint);
-	void initShader();
+	void initShader(std::string, std::string, GLuint&, GLuint&, GLuint&, GLuint&);
 	std::string ReadShaderFile(std::string);
-	GLuint& getProgram(){ return Program; };
-	GLuint& getShaderMM(){ return ShaderMMLocation; };
-	GLuint& getShaderVM(){ return ShaderPMLocation; };
-	GLuint& getShaderPM(){ return ShaderVMLocation; };
+
 
 private:
-	GLuint Program;
-	GLuint ShaderMMLocation, ShaderVMLocation, ShaderPMLocation;
+
 
 };
 

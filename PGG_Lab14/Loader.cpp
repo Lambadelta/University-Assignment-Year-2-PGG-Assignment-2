@@ -40,6 +40,11 @@ void Loader::ReadObjFileData(FILE* objFile) {
 			fscanf_s(objFile, "%f %f %f\n", &normal.x, &normal.y, &normal.z);
 			Normals.push_back(normal);
 		}
+		else if (strcmp(buffer, "vt") == 0) {
+			glm::vec2 ut;
+			fscanf_s(objFile, "%f %f\n", &ut.x, &ut.y);
+			UV.push_back(ut);
+		}
 
 		//if first part of the line is "f"
 		else if (strcmp(buffer, "f") == 0) {
@@ -162,8 +167,25 @@ Object Loader::packageModelObject(std::string PATH)
 	//objLoader(PATH);
 	//BuildMeshVertAndNormalLists();
 	Object Package(mVerts, mNormals);
-
+	clearLoadedData();
 	return Package;
+}
+
+void Loader::clearLoadedData()
+{
+	Verts.clear();
+	UV.clear();
+	Normals.clear();
+	FVerts.clear();
+	mVerts.clear();
+	mNormals.clear();
+
+	Verts.resize(0);
+	UV.resize(0);
+	Normals.resize(0);
+	FVerts.resize(0);
+	mVerts.resize(0);
+	mNormals.resize(0);
 }
 
 FaceVertex Loader::ExtractFaceVertexData(std::string& s) {

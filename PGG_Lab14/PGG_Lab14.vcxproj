@@ -91,6 +91,7 @@
     <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnemyEntity.h" />
     <ClInclude Include="FaceVertex.h" />
     <ClInclude Include="GameModel.h" />
     <ClInclude Include="glew.h" />

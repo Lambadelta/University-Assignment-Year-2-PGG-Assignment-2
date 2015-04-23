@@ -24,14 +24,15 @@ public:
 	std::vector<float>& getVerts(){ return mVerts; }
 	std::vector<float>& getNormals(){ return mNormals; }
 	Object packageModelObject(std::string);
+	void clearLoadedData();
 
 
 	
 
 private:
-	std::vector<glm::vec3> Verts;
-	std::vector<glm::vec2> UV;
-	std::vector<glm::vec3> Normals;
+	std::vector<glm::vec3>  Verts;
+	std::vector<glm::vec2>  UV;
+	std::vector<glm::vec3>  Normals;
 	std::vector<FaceVertex> FVerts;
 
 

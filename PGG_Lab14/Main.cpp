@@ -84,8 +84,8 @@ int main(int argc, char *argv[])
 	// You can experiment with the numbers to see what they do
 	int winPosX = 100;
 	int winPosY = 100;
-	int winWidth = 640;
-	int winHeight = 480;
+	int winWidth = 480;
+	int winHeight = 640;
 	SDL_Window *window = SDL_CreateWindow("My Window!!!",  // The first parameter is the window title
 		winPosX, winPosY,
 		winWidth, winHeight,
@@ -137,11 +137,18 @@ int main(int argc, char *argv[])
 	//GameModel *myObject = new GameModel();
 	// Set object's position like this:
 	//myObject->SetPosition(0,0,0);
-	PlayerEntity Test;
-	Loader test;
-	Test.setMeshObject(test.packageModelObject("OrionOBJ.obj"));
-	Test.initVAO();
-	Test.setPosition(0.0f, 0.0f, 0.0f);
+	PlayerEntity Player;
+	PlayerEntity EnemyTest;
+	Loader OBJLoader;
+	Player.setMeshObject(OBJLoader.packageModelObject("OrionOBJ.obj"));
+	Player.initVAO("vShader.txt","fShader.txt");
+	Player.setRotation(-1.7f, 15.7f, 0.f);
+	Player.setPosition(0.0f, -11.5f, 0.0f);
+	EnemyTest.setMeshObject(OBJLoader.packageModelObject("Enemy.obj"));
+	EnemyTest.initVAO("vShader.txt","fShaderEnemy.txt");
+	//Rotation to ensure Enemies are facing player
+	EnemyTest.setRotation(-1.7f, -12.5f, 0.f);
+	EnemyTest.setPosition(0.0f, 14.5f, 0.0f);
 
 
 	// We are now preparing for our main loop (also known as the 'game loop')
@@ -190,21 +197,49 @@ int main(int argc, char *argv[])
 				// Let's figure out which key they pressed
 				switch( incomingEvent.key.keysym.sym )
 				{
+				case SDLK_ESCAPE:
+					go = false;
+					break;
 				case SDLK_DOWN:
 					break;
 				case SDLK_UP:
 					break;
 				case SDLK_LEFT:
+					Player.movePLeft(true);
 					break;
 				case SDLK_RIGHT:
+					Player.movePRight(true);
 					break;
 				case SDLK_a:
+					Player.movePLeft(true);
+					EnemyTest.movePLeft(true);
 					break;
 				case SDLK_d:
+					Player.movePRight(true);
+					EnemyTest.movePRight(true);
 					break;
 				case SDLK_w:
 					break;
 				case SDLK_s:
+					break;
+				}
+				break;
+			case SDL_KEYUP:
+				switch (incomingEvent.key.keysym.sym)
+				{
+				case SDLK_LEFT:
+					Player.movePLeft(false);
+					break;
+				case SDLK_RIGHT:
+					Player.movePRight(false);
+					break;
+				case SDLK_a:
+					Player.movePLeft(false);
+					EnemyTest.movePLeft(false);
+					break;
+				case SDLK_d:
+					Player.movePRight(false);
+					EnemyTest.movePRight(false);
 					break;
 				}
 				break;
@@ -229,7 +264,8 @@ int main(int argc, char *argv[])
 		
 		// Update the model, to make it rotate
 		//myObject->Update( deltaTs );
-		Test.update(deltaTs);
+		Player.update(deltaTs);
+		EnemyTest.update(deltaTs);
 
 
 
@@ -243,16 +279,17 @@ int main(int argc, char *argv[])
 
 
 		// Construct a projection matrix for the camera
-		glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+		glm::mat4 Projection = glm::perspective(45.0f, 3.0f / 4.0f, 0.1f, 100.0f);
 
 		// Create a viewing matrix for the camera
 		// Don't forget, this is the opposite of where the camera actually is
 		// You can think of this as moving the world away from the camera
-		glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0,-1.0f,-6.0f) );
+		glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.f,-1.0f,-30.0f) );
 
 		// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
 		//myObject->Draw( View, Projection);
-		Test.draw(View, Projection);
+		Player.draw(View, Projection);
+		EnemyTest.draw(View, Projection);
 
 
 		// This tells the renderer to actually show its contents to the screen
