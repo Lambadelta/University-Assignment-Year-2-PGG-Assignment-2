@@ -35,9 +35,10 @@ private:
 	std::vector<glm::vec3>  Normals;
 	std::vector<FaceVertex> FVerts;
 
-
+		
 	std::vector<float> mVerts;
 	std::vector<float> mNormals;
+	std::vector<float> mTexCoord;
 
 };
 

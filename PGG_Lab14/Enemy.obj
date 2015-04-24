@@ -1,7 +1,4 @@
-# This file uses centimeters as units for non-parametric coordinates.
 
-mtllib Enemy.mtl
-g default
 v -0.084023 0.200674 -2.423563
 v -0.230712 0.211916 2.422361
 v -0.065197 0.288529 -2.484940
@@ -2098,8 +2095,6 @@ vn -0.116629 0.886046 0.448687
 vn -0.116629 0.886046 0.448687
 vn 0.112805 0.886858 0.448061
 vn 0.969173 0.218385 -0.114066
-g dark_fighter_6:dark_fighter_6
-usemtl initialShadingGroup
 f 6/1/1 9/2/2 8/3/3
 f 8/3/4 7/4/5 6/1/6
 f 1/5/7 149/6/8 133/7/9

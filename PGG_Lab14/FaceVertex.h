@@ -1,6 +1,8 @@
 #ifndef FACEVERTEX_H
 #define FACEVERTEX_H
-
+/**
+@brief A struct containing the data that makes up a Face
+*/
 struct FaceVertex 
 {
 	int Vertex;

@@ -10,7 +10,11 @@
 #include <glm.hpp> // This is the main GLM header
 #include <gtc/matrix_transform.hpp> // This one lets us use matrix transformations
 
-#include "GameModel.h"
+#include "Manager.h"
+#include "GameplayState.h"
+#include "Titlestate.h"
+#include "Time.h"
+
 
 
 // An initialisation function, mainly for GLEW
@@ -48,16 +52,14 @@ int main(int argc, char *argv[])
 	// It takes a 'flag' parameter which we use to tell SDL what systems we're going to use
 	// Here, we want to use SDL's video system, so we give it the flag for this
 	// Incidentally, this also initialises the input event system
-	// This function also returns an error value if something goes wrong
-	// So we can put this straight in an 'if' statement to check and exit if need be
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
 		// Something went very wrong in initialisation, all we can do is exit
-		std::cout<<"Whoops! Something went very wrong, cannot initialise SDL :("<<std::endl;
+		std::cout<<"Whoops! Something went wrong cannot initialise SDL"<<std::endl;
 		return -1;
 	}
-
-
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1048);
+	TTF_Init();
 
 	// This is how we set the context profile
 	// We need to do this through SDL, so that it can set up the OpenGL drawing context that matches this
@@ -79,37 +81,21 @@ int main(int argc, char *argv[])
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
 
-	// Now we have got SDL initialised, we are ready to create a window!
-	// These are some variables to help show you what the parameters are for this function
-	// You can experiment with the numbers to see what they do
 	int winPosX = 100;
 	int winPosY = 100;
 	int winWidth = 480;
 	int winHeight = 640;
-	SDL_Window *window = SDL_CreateWindow("My Window!!!",  // The first parameter is the window title
+	SDL_Window *window = SDL_CreateWindow("PGG Assignment 2 - Harry Friend",  // The first parameter is the window title
 		winPosX, winPosY,
 		winWidth, winHeight,
-		SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
-	// The last parameter lets us specify a number of options
-	// Here, we tell SDL that we want the window to be shown and that it can be resized
-	// You can learn more about SDL_CreateWindow here: https://wiki.libsdl.org/SDL_CreateWindow?highlight=%28\bCategoryVideo\b%29|%28CategoryEnum%29|%28CategoryStruct%29
-	// The flags you can pass in for the last parameter are listed here: https://wiki.libsdl.org/SDL_WindowFlags
-
-	// The SDL_CreateWindow function returns an SDL_Window
-	// This is a structure which contains all the data about our window (size, position, etc)
-	// We will also need this when we want to draw things to the window
-	// This is therefore quite important we don't lose it!
+		SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
 
-
-
+	//Creates a GameStateManager
+	Manager GSManager;
 
 
 	// The SDL_Renderer is a structure that handles rendering
-	// It will store all of SDL's internal rendering related settings
-	// When we create it we tell it which SDL_Window we want it to render to
-	// That renderer can only be used for this window
-	// (yes, we can have multiple windows - feel free to have a play sometime)
 	SDL_Renderer * renderer = SDL_CreateRenderer( window, -1, 0 );
 
 
@@ -133,139 +119,33 @@ int main(int argc, char *argv[])
 	// Enable the depth test to make sure triangles in front are always in front no matter the order they are drawn
 	glEnable(GL_DEPTH_TEST);
 
-	// Create a model
-	//GameModel *myObject = new GameModel();
-	// Set object's position like this:
-	//myObject->SetPosition(0,0,0);
-	PlayerEntity Player;
-	PlayerEntity EnemyTest;
-	Loader OBJLoader;
-	Player.setMeshObject(OBJLoader.packageModelObject("OrionOBJ.obj"));
-	Player.initVAO("vShader.txt","fShader.txt");
-	Player.setRotation(-1.7f, 15.7f, 0.f);
-	Player.setPosition(0.0f, -11.5f, 0.0f);
-	EnemyTest.setMeshObject(OBJLoader.packageModelObject("Enemy.obj"));
-	EnemyTest.initVAO("vShader.txt","fShaderEnemy.txt");
-	//Rotation to ensure Enemies are facing player
-	EnemyTest.setRotation(-1.7f, -12.5f, 0.f);
-	EnemyTest.setPosition(0.0f, 14.5f, 0.0f);
+	Time time;
 
+	time.callStart();
 
-	// We are now preparing for our main loop (also known as the 'game loop')
-	// This loop will keep going round until we exit from our program by changing the bool 'go' to the value false
-	// This loop is an important concept and forms the basis of most games you'll be writing
-	// Within this loop we generally do the following things:
-	//   * Check for input from the user (and do something about it!)
-	//   * Update our world
-	//   * Draw our world
-	// We will come back to this in later lectures
-	bool go = true;
-	while( go )
+	//Sets GSManagers Game Status to true. 
+	GSManager.setGameStatus(true);
+	//Adds the GameplayState to the Manager
+	GSManager.Add(new Titlestate(&GSManager, renderer));
+	GSManager.setMenuStatus(true);
+	//GSManager.Add(new GameplayState(&GSManager, renderer));
+	bool GameLoop = GSManager.getGameStatus();
+	while(GameLoop)
 	{
+		//Has the manager handle the events of the state on top of the stack.
+		GSManager.EventHandle();
 
-		// Here we are going to check for any input events
-		// Basically when you press the keyboard or move the mouse, the parameters are stored as something called an 'event'
-		// SDL has a queue of events
-		// We need to check for each event and then do something about it (called 'event handling')
-		// the SDL_Event is the datatype for the event
-		SDL_Event incomingEvent;
-		// SDL_PollEvent will check if there is an event in the queue
-		// If there's nothing in the queue it won't sit and wait around for an event to come along (there are functions which do this, and that can be useful too!)
-		// For an empty queue it will simply return 'false'
-		// If there is an event, the function will return 'true' and it will fill the 'incomingEvent' we have given it as a parameter with the event data
-		while( SDL_PollEvent( &incomingEvent ) )
-		{
-			// If we get in here, we have an event and need to figure out what to do with it
-			// For now, we will just use a switch based on the event's type
-			switch( incomingEvent.type )
-			{
-			case SDL_QUIT:
-				// The event type is SDL_QUIT
-				// This means we have been asked to quit - probably the user clicked on the 'x' at the top right corner of the window
-				// To quit we need to set our 'go' bool to false so that we can escape out of the game loop
-				go = false;
-				break;
-
-				// If you want to learn more about event handling and different SDL event types, see:
-				// https://wiki.libsdl.org/SDL_Event
-				// and also: https://wiki.libsdl.org/SDL_EventType
-				// but don't worry, we'll be looking at handling user keyboard and mouse input soon
-
-			case SDL_KEYDOWN:
-				// The event type is SDL_KEYDOWN
-				// This means that the user has pressed a key
-				// Let's figure out which key they pressed
-				switch( incomingEvent.key.keysym.sym )
-				{
-				case SDLK_ESCAPE:
-					go = false;
-					break;
-				case SDLK_DOWN:
-					break;
-				case SDLK_UP:
-					break;
-				case SDLK_LEFT:
-					Player.movePLeft(true);
-					break;
-				case SDLK_RIGHT:
-					Player.movePRight(true);
-					break;
-				case SDLK_a:
-					Player.movePLeft(true);
-					EnemyTest.movePLeft(true);
-					break;
-				case SDLK_d:
-					Player.movePRight(true);
-					EnemyTest.movePRight(true);
-					break;
-				case SDLK_w:
-					break;
-				case SDLK_s:
-					break;
-				}
-				break;
-			case SDL_KEYUP:
-				switch (incomingEvent.key.keysym.sym)
-				{
-				case SDLK_LEFT:
-					Player.movePLeft(false);
-					break;
-				case SDLK_RIGHT:
-					Player.movePRight(false);
-					break;
-				case SDLK_a:
-					Player.movePLeft(false);
-					EnemyTest.movePLeft(false);
-					break;
-				case SDLK_d:
-					Player.movePRight(false);
-					EnemyTest.movePRight(false);
-					break;
-				}
-				break;
-			}
-		}
-
+		//Updates GameLoop with the current status of the game.
+		GameLoop = GSManager.getGameStatus();
+		
 		
 		// Update our world
 
-		// We are going to work out the time between each frame now
-		// First, find the current time
-		// again, SDL_GetTicks() returns the time in milliseconds since SDL was initialised
-		// We can use this as the current time
-		unsigned int current = SDL_GetTicks();
-		// Next, we want to work out the change in time between the previous frame and the current one
-		// This is a 'delta' (used in physics to denote a change in something)
-		// So we call it our 'deltaT' and I like to use an 's' to remind me that it's in seconds!
-		// (To get it in seconds we need to divide by 1000 to convert from milliseconds)
-		float deltaTs = (float) (current - lastTime) / 1000.0f;
-		// Now that we've done this we can use the current time as the next frame's previous time
-		lastTime = current;
+		time.updateTime();
+		float deltaTs = time.getDelta();
 		
-		// Update the model, to make it rotate
-		//myObject->Update( deltaTs );
-		Player.update(deltaTs);
-		EnemyTest.update(deltaTs);
+		//Updates the state on top of the stack.
+		GSManager.update(deltaTs);
 
 
 
@@ -276,26 +156,24 @@ int main(int argc, char *argv[])
 		// This writes the above colour to the colour part of the framebuffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		SDL_SetRenderDrawColor(renderer, 0x0, 0x0, 0x0, 0x0);
+		SDL_RenderClear(renderer);
 
+		//Draws all states.
+		GSManager.draw();
 
-		// Construct a projection matrix for the camera
-		glm::mat4 Projection = glm::perspective(45.0f, 3.0f / 4.0f, 0.1f, 100.0f);
-
-		// Create a viewing matrix for the camera
-		// Don't forget, this is the opposite of where the camera actually is
-		// You can think of this as moving the world away from the camera
-		glm::mat4 View = glm::translate(glm::mat4(1.0f), glm::vec3(0.f,-1.0f,-30.0f) );
-
-		// Draw the object using the given view (which contains the camera orientation) and projection (which contains information about the camera 'lense')
-		//myObject->Draw( View, Projection);
-		Player.draw(View, Projection);
-		EnemyTest.draw(View, Projection);
-
-
+		if (GSManager.getMenuStatus())
+		{
+			SDL_RenderPresent(renderer);
+		}
 		// This tells the renderer to actually show its contents to the screen
 		// We'll get into this sort of thing at a later date - or just look up 'double buffering' if you're impatient :P
-		SDL_GL_SwapWindow( window );
-		
+		if (!GSManager.getMenuStatus())
+		{
+			SDL_GL_SwapWindow(window);
+		}
+
+
 		// Limiter in case we're running really quick
 		if( deltaTs < (1.0f/50.0f) )	// not sure how accurate the SDL_Delay function is..
 		{

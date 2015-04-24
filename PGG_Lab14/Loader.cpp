@@ -1,4 +1,12 @@
 #include "Loader.h"
+/********************************************************************************/
+/* The functions Load, ReadObjFileData, BuildMeshVertAndNormalLists,			*/
+/* and ExtractFaceVertexData were written by Pete, and distributed				*/
+/* to the class. The function objLoader that I wrote is currently broken, and	*/
+/* doesn't read the vertex/normal data correctly. The functions clearLoadedData,*/
+/* and packageModelData are my functions, and loader wouldn't function without	*/
+/* them.																		*/
+/********************************************************************************/
 void Loader::Load(std::string objFileName) {
 
 	FILE * objFile;
@@ -79,6 +87,9 @@ void Loader::ReadObjFileData(FILE* objFile) {
 }
 bool Loader::objLoader(std::string path)
 {
+	/************************************************************************/
+	/* This file reader is broken, and isn't being used.                    */
+	/************************************************************************/
 	std::ifstream in(path, std::ios::in);
 	if (!in) 
 	{
@@ -158,6 +169,11 @@ void Loader::BuildMeshVertAndNormalLists()
 			mNormals.push_back(0);
 			mNormals.push_back(0);
 		}
+		if (vnp->TexCoordinate > 0)
+		{
+			mTexCoord.push_back(UV[vnp->TexCoordinate -1].x);
+			mTexCoord.push_back(UV[vnp->TexCoordinate -1].y);
+		}
 	}
 }
 
@@ -166,7 +182,7 @@ Object Loader::packageModelObject(std::string PATH)
 	Load(PATH);
 	//objLoader(PATH);
 	//BuildMeshVertAndNormalLists();
-	Object Package(mVerts, mNormals);
+	Object Package(mVerts, mNormals,mTexCoord);
 	clearLoadedData();
 	return Package;
 }
@@ -179,6 +195,7 @@ void Loader::clearLoadedData()
 	FVerts.clear();
 	mVerts.clear();
 	mNormals.clear();
+	mTexCoord.clear();
 
 	Verts.resize(0);
 	UV.resize(0);
@@ -186,6 +203,7 @@ void Loader::clearLoadedData()
 	FVerts.resize(0);
 	mVerts.resize(0);
 	mNormals.resize(0);
+	mTexCoord.resize(0);
 }
 
 FaceVertex Loader::ExtractFaceVertexData(std::string& s) {
