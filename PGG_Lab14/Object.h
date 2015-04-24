@@ -4,6 +4,11 @@
 #include <vector>
 #include <glm.hpp>
 #include "FaceVertex.h"
+/**
+@brief A struct representing an Object
+
+Contains 3 vectors that make up a Obj file.
+*/
 struct Object 
 {
 	std::vector<float> Verts;
