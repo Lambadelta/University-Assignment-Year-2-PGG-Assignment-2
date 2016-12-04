@@ -62,7 +62,7 @@ void PlayerEntity::update(float dt)
 	ModelMatrix = glm::rotate(ModelMatrix, Rotation.y, glm::vec3(0, 1, 0));
 	ModelMatrix = glm::rotate(ModelMatrix, Rotation.x, glm::vec3(1, 0, 0));
 	ModelMatrix = glm::rotate(ModelMatrix, Rotation.z, glm::vec3(0, 0, 1));
-	for (int i = 0; i < vBullet.size(); i++)
+	for (unsigned int i = 0; i < vBullet.size(); i++)
 	{
 		vBullet[i].update(dt);
 	}
@@ -79,8 +79,8 @@ void PlayerEntity::shootBullet()
 		{
 			Bullet newBullet;
 			newBullet.setMeshObject(bulletMesh);
-			newBullet.initVAO("vShader.txt", "fShader.txt");
-			newBullet.initTexture("PBulletTexture.png");
+			newBullet.initVAO("Assets/shaders/vShader.txt", "Assets/shaders/fShader.txt");
+			newBullet.initTexture("Assets/images/PBulletTexture.png");
 			newBullet.setPosition(Position.x, Position.y, Position.z);
 			newBullet.setRotation(Rotation.x, Rotation.y, Rotation.z);
 			vBullet.push_back(newBullet);

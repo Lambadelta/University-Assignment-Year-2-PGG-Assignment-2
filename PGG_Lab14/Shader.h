@@ -1,9 +1,10 @@
 #ifndef SHADER_H
 #define SHADER_H
-#include "glew.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <GL/glew.h>
 /**
 @brief A class that represents a shader
 

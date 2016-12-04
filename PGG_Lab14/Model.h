@@ -1,13 +1,14 @@
 #ifndef MODEL_H
 #define MODEL_H
+
 #include "Object.h"
-#include "glew.h"
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
 #include "Shader.h"
 #include "PVector.h"
-#include "SDL.h"
-#include "SDL_image.h"
+#include <SDL.h>
+#include <GL/glew.h>
+#include <SDL_image.h>
 /**
 @brief A class that represents a Model
 Contains all the methods, and variables to create a 3D model

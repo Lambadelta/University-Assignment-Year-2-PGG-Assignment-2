@@ -17,9 +17,9 @@ void BackgroundPlane::update(float dt)
 	if (spin)
 	{
 		Rotation.y += dt * 1.f;
-		while (Rotation.y > (3.14159265358979323846 * 2.0))
+		while (Rotation.y > (float)(3.1415 * 2.0))
 		{
-			Rotation.y -= (3.14159265358979323846 * 2.0);
+			Rotation.y -= (float)(3.1415 * 2.0);
 		}
 	}
 	ModelMatrix = glm::translate(glm::mat4(1.0F), Position);

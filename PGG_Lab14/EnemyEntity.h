@@ -1,5 +1,6 @@
 #ifndef ENEMYENTITY_H
 #define ENEMYENTITY_H
+
 #include "Model.h"
 #include "Bullet.h"
 #include "Timer.h"

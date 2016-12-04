@@ -1,6 +1,5 @@
 #include "GameplayState.h"
 
-
 GameplayState::GameplayState(Manager* GSManager, SDL_Renderer* Renderer) : Gamestate(GSManager, Renderer)
 {
 
@@ -10,28 +9,28 @@ GameplayState::GameplayState(Manager* GSManager, SDL_Renderer* Renderer) : Games
 
 	tESpawn.setInitialTime(2.f);
 
-	BackgroundP.setMeshObject(OBJLoader.packageModelObject("Background.obj"));
-	BackgroundP.initVAO("vShader.txt", "fShader.txt");
-	BackgroundP.initTexture("Background.png");
+	BackgroundP.setMeshObject(OBJLoader.packageModelObject("Assets/models/Background.obj"));
+	BackgroundP.initVAO("Assets/shaders/vShader.txt", "Assets/shaders/fShader.txt");
+	BackgroundP.initTexture("Assets/images/Background.png");
 	BackgroundP.setRotation(-1.564f, 0.f, 0.f);
 	BackgroundP.setPosition(0.f, 0.f, -1.f);
 
 
 
 	//Load in the player ship mesh, and store it inside the player
-	PlayerMesh = OBJLoader.packageModelObject("OrionOBJ.obj");
+	PlayerMesh = OBJLoader.packageModelObject("Assets/models/OrionOBJ.obj");
 	Player.setMeshObject(PlayerMesh);
 	//Load in the bullet mesh, and store it inside the player to be used for any bullets to prevent reloading the object.
-	BulletMesh = OBJLoader.packageModelObject("Bullet.obj");
+	BulletMesh = OBJLoader.packageModelObject("Assets/models/Bullet.obj");
 	Player.setBulletMesh(BulletMesh);
 	//Initialize the Vertex Array Object of the Player
-	Player.initVAO("vShader.txt", "fShader.txt");
-	Player.initTexture("PlayerTexture.png");
+	Player.initVAO("Assets/shaders/vShader.txt", "Assets/shaders/fShader.txt");
+	Player.initTexture("Assets/images/PlayerTexture.png");
 	//Set the rotation, and position of the player
 	Player.setRotation(-1.7f, 15.7f, 0.f);
 	Player.setPosition(0.0f, -11.5f, 0.0f);
 	//Load in the enemy ship mesh, and store it so that any new enemies created can use it.
-	EnemyMesh = OBJLoader.packageModelObject("Enemy.obj");
+	EnemyMesh = OBJLoader.packageModelObject("Assets/models/Enemy.obj");
 	// Construct a projection matrix for the camera
 	Projection = glm::perspective(45.0f, 3.0f / 4.0f, 0.1f, 100.0f);
 	// Create a viewing matrix for the camera
@@ -39,8 +38,8 @@ GameplayState::GameplayState(Manager* GSManager, SDL_Renderer* Renderer) : Games
 
 	initVisualUI();
 
-	GameMus = Mix_LoadMUS("GameStateMus.wav");
-	Laser = Mix_LoadWAV("laser.wav");
+	GameMus = Mix_LoadMUS("Assets/music/GameStateMus.wav");
+	Laser = Mix_LoadWAV("Assets/music/laser.wav");
 	Mix_PlayMusic(GameMus, -1);
 	Mix_VolumeMusic(30);
 	Mix_VolumeChunk(Laser, 5);
@@ -66,18 +65,18 @@ void GameplayState::update(float dt)
 		spawnEnemy();
 		tESpawn.resetTimer();
 	}
-	for (int i = 0; i < vEnemy.size(); i++)
+	for (unsigned int i = 0; i < vEnemy.size(); i++)
 	{
 		vEnemy[i].update(dt);
 	}
-	for (int ii = 0; ii < PlayerHealth.size(); ii++)
+	for (unsigned int ii = 0; ii < PlayerHealth.size(); ii++)
 	{
 		PlayerHealth[ii].update(dt);
 	}
 	bool AABBbreak = false;
-	for (int j = 0; j < Player.getVBullet().size(); j++)
+	for (unsigned int j = 0; j < Player.getVBullet().size(); j++)
 	{
-		for (int k = 0; k < vEnemy.size(); k++)
+		for (unsigned int k = 0; k < vEnemy.size(); k++)
 		{
 			if (checkAABB(Player.getVBullet()[j], vEnemy[k].getXYPos()))
 			{
@@ -91,9 +90,9 @@ void GameplayState::update(float dt)
 		if (AABBbreak){ break; }
 	}
 	AABBbreak = false;
-	for (int p = 0; p < vEnemy.size(); p++)
+	for (unsigned int p = 0; p < vEnemy.size(); p++)
 	{
-		for (int m = 0; m < vEnemy[p].getVBullet().size(); m++)
+		for (unsigned int m = 0; m < vEnemy[p].getVBullet().size(); m++)
 		{
 			if (checkAABB(vEnemy[p].getVBullet()[m], Player.getXYPos()))
 			{
@@ -111,7 +110,7 @@ void GameplayState::update(float dt)
 void GameplayState::draw()
 {
 	BackgroundP.draw(View, Projection);
-	for (int i = 0; i < Player.getVBullet().size(); i++)
+	for (unsigned int i = 0; i < Player.getVBullet().size(); i++)
 	{
 		Player.getVBullet()[i].draw(View, Projection);
 	}
@@ -119,16 +118,16 @@ void GameplayState::draw()
 	
 	Player.draw(View, Projection);
 
-	for (int j = 0; j < vEnemy.size(); j++)
+	for (unsigned int j = 0; j < vEnemy.size(); j++)
 	{
 		vEnemy[j].draw(View, Projection);
-		for (int k = 0; k < vEnemy[j].getVBullet().size(); k++)
+		for (unsigned int k = 0; k < vEnemy[j].getVBullet().size(); k++)
 		{
 			vEnemy[j].getVBullet()[k].draw(View, Projection);
 		}
 	}
 
-	for (int ii = 0; ii < PlayerHealth.size(); ii++)
+	for (unsigned int ii = 0; ii < PlayerHealth.size(); ii++)
 	{
 		if (PlayerHealth[ii].getAliveStatus())
 		{
@@ -144,8 +143,8 @@ void GameplayState::spawnEnemy()
 	Enemy.setMeshObject(EnemyMesh);
 	Enemy.setBulletMesh(BulletMesh);
 	//Initialize the Vertex Array Object of the Enemy
-	Enemy.initVAO("vShader.txt", "fShader.txt");
-	Enemy.initTexture("EnemyTexture.png");
+	Enemy.initVAO("Assets/shaders/vShader.txt", "Assets/shaders/fShader.txt");
+	Enemy.initTexture("Assets/images/EnemyTexture.png");
 	//Setting the Position, and Rotation to ensure Enemies are facing player
 	Enemy.setRotation(-1.7f, -15.7f, 0.f);
 	Enemy.setPosition(randNum(-8,8), 20.5f, 0.0f);
@@ -155,13 +154,13 @@ void GameplayState::spawnEnemy()
 
 void GameplayState::initVisualUI()
 {
-	PlayerHealthUI = OBJLoader.packageModelObject("PHealth.obj");
+	PlayerHealthUI = OBJLoader.packageModelObject("Assets/models/PHealth.obj");
 	for (int i = 0; i < 3; i++)
 	{
 		BackgroundPlane newHealthIcon;
 		newHealthIcon.setMeshObject(PlayerHealthUI);
-		newHealthIcon.initVAO("vShader.txt", "fShader.txt");
-		newHealthIcon.initTexture("PlayerTexture.png");
+		newHealthIcon.initVAO("Assets/shaders/vShader.txt", "Assets/shaders/fShader.txt");
+		newHealthIcon.initTexture("Assets/images/PlayerTexture.png");
 		newHealthIcon.setRotation(-1.7f, 15.7f, 0.f);
 		newHealthIcon.setPosition(-9.5f + (i * 2), -10.5f, 5.0f);
 		newHealthIcon.setSpin(true);
@@ -172,15 +171,15 @@ void GameplayState::initVisualUI()
 
 bool GameplayState::checkAABB(Bullet& BO, PVector& EO)
 {
-	int X1min = BO.getXYPos().x;
-	int X1max = BO.getXYPos().x + 0.1f;
-	int Y1min = BO.getXYPos().y;
-	int Y1max = BO.getXYPos().y + 0.1f;
+	float X1min = BO.getXYPos().x;
+	float X1max = BO.getXYPos().x + 0.1f;
+	float Y1min = BO.getXYPos().y;
+	float Y1max = BO.getXYPos().y + 0.1f;
 
-	int X2min = EO.x;
-	int X2max = EO.x + 5.f;
-	int Y2min = EO.y;
-	int Y2max = EO.y + 2.5f;
+	float X2min = EO.x;
+	float X2max = EO.x + 5.f;
+	float Y2min = EO.y;
+	float Y2max = EO.y + 2.5f;
 
 	if (X1max < X2min || X1min > X2max)
 	{
@@ -196,9 +195,9 @@ bool GameplayState::checkAABB(Bullet& BO, PVector& EO)
 
 void GameplayState::cleanup()
 {
-	for (int j = 0; j < vEnemy.size(); j++)
+	for (unsigned int j = 0; j < vEnemy.size(); j++)
 	{
-		for (int m = 0; m < vEnemy[j].getVBullet().size(); m++)
+		for (unsigned int m = 0; m < vEnemy[j].getVBullet().size(); m++)
 		{
 			if (!vEnemy[j].getVBullet()[m].getAliveStatus())
 			{
@@ -211,7 +210,7 @@ void GameplayState::cleanup()
 			break;
 		}
 	}
-	for (int i = 0; i < Player.getVBullet().size(); i++)
+	for (unsigned int i = 0; i < Player.getVBullet().size(); i++)
 	{
 		if (!Player.getVBullet()[i].getAliveStatus())
 		{
@@ -238,7 +237,7 @@ void GameplayState::cleanup()
 
 float GameplayState::randNum(int min, int max)
 {
-	float random = std::rand() % (max - min) + min;
+	float random = (float)(std::rand() % (max - min) + min);
 	return random;
 }
 
@@ -297,8 +296,8 @@ bool GameplayState::EventHandle()
 			}
 			break;
 		}
-		return true;
 	}
+	return true;
 }
 
 

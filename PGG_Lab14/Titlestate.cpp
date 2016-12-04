@@ -5,8 +5,8 @@
 /************************************************************************/
 Titlestate::Titlestate(Manager* GSManager, SDL_Renderer* renderer) : Gamestate(GSManager, renderer)
 {
-	Menu = new Background("TitleMenu.png", renderer);
-	Title = Mix_LoadMUS("TitleMusic.wav");
+	Menu = new Background("Assets/images/TitleMenu.png", renderer);
+	Title = Mix_LoadMUS("Assets/music/TitleMusic.wav");
 	Mix_PlayMusic(Title, -1);
 	Mix_VolumeMusic(30);
 }

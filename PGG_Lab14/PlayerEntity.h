@@ -1,6 +1,6 @@
 #ifndef PLAYERENTITY_H
 #define PLAYERENTITY_H
-#include "Model.h"
+
 #include "Bullet.h"
 #include "Timer.h"
 #include <vector>

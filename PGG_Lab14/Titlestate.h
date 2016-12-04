@@ -5,7 +5,7 @@
 #include "Manager.h"
 #include "Background.h"
 #include "GameplayState.h"
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 #include "Helpstate.h"
 /************************************************************************/
 /* This class was submitted as part of PGG Assignment 1 with slight		*/

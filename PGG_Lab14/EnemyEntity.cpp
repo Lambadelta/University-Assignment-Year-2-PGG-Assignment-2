@@ -50,7 +50,7 @@ void EnemyEntity::update(float dt)
 	PV.x = Position.x - 4.5f;
 	PV.y = Position.y - 2.5f;
 	shootBullet();
-	for (int i = 0; i < vBullet.size(); i++)
+	for (unsigned int i = 0; i < vBullet.size(); i++)
 	{
 		vBullet[i].update(dt);
 	}
@@ -70,8 +70,8 @@ void EnemyEntity::shootBullet()
 		{
 			Bullet newBullet;
 			newBullet.setMeshObject(bulletMesh);
-			newBullet.initVAO("vShader.txt", "fShader.txt");
-			newBullet.initTexture("EBulletTexture.png");
+			newBullet.initVAO("Assets/shaders/vShader.txt", "Assets/shaders/fShader.txt");
+			newBullet.initTexture("Assets/images/EBulletTexture.png");
 			newBullet.setPosition(Position.x, Position.y, Position.z);
 			newBullet.setRotation(Rotation.x, Rotation.y, Rotation.z);
 			newBullet.upordown(false);

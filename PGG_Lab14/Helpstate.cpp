@@ -5,7 +5,7 @@
 /************************************************************************/
 Helpstate::Helpstate(Manager* GSManager, SDL_Renderer* renderer) : Gamestate(GSManager,renderer)
 {
-	Help = new Background("Help.png", renderer);
+	Help = new Background("Assets/images/Help.png", renderer);
 }
 
 Helpstate::~Helpstate()

@@ -1,4 +1,5 @@
-#include "timer.h"
+#include "Timer.h"
+#include <ctime>
 
 /************************************************************************/
 /* This class was submitted as part of PGG Assignment 1                 */
@@ -49,9 +50,9 @@ bool Timer::expiredTimer()
 
 float Timer::randNum(int min, int max)
 {
-	std::srand((unsigned int) std::time(0));
-	float random = std::rand() % (max - min) + min;
-	return random;
+	std::srand((unsigned int) std::time_t(0));
+	int random = std::rand() % (max - min) + min;
+	return (float)random;
 }
 
 void Timer::setInitialTime(float ms)

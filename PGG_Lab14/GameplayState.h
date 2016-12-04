@@ -7,8 +7,9 @@
 #include "PlayerEntity.h"
 #include "EnemyEntity.h"
 #include "BackgroundPlane.h"
-#include "SDL_mixer.h"
+#include <SDL_mixer.h>
 #include "Creditsstate.h"
+#include <ctime>
 
 class GameplayState : public Gamestate
 {

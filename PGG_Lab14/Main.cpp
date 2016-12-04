@@ -1,10 +1,11 @@
 
 #include <SDL.h>
 
-#include "glew.h"
+
 
 #include <iostream>
-
+#include <GL/glew.h>
+#include <GL/wglew.h>
 // The GLM library contains vector and matrix functions and classes for us to use
 // They are designed to easily work with OpenGL!
 #include <glm.hpp> // This is the main GLM header
@@ -59,7 +60,7 @@ int main(int argc, char *argv[])
 		return -1;
 	}
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1048);
-	TTF_Init();
+//	TTF_Init();
 
 	// This is how we set the context profile
 	// We need to do this through SDL, so that it can set up the OpenGL drawing context that matches this

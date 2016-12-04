@@ -14,7 +14,7 @@ void Loader::Load(std::string objFileName) {
 	fopen_s(&objFile, objFileName.c_str(), "r");
 
 	if (NULL == objFile)
-		printf("Could not open obj file: %s\n", objFileName);
+		printf("Could not open obj file: %s\n", objFileName.c_str());
 
 	//rips the raw data out of the obj file and stores it in various std::vectors
 	ReadObjFileData(objFile);
@@ -77,7 +77,7 @@ void Loader::ReadObjFileData(FILE* objFile) {
 
 			/* now just send each split to the function which works out what they contain
 			* and store what comes back in the faceVerts std::vector */
-			for (int i = 0; i < splits.size(); i++)
+			for (unsigned int i = 0; i < splits.size(); i++)
 				FVerts.push_back(ExtractFaceVertexData(splits[i]));
 		}
 		else {
@@ -93,7 +93,7 @@ bool Loader::objLoader(std::string path)
 	std::ifstream in(path, std::ios::in);
 	if (!in) 
 	{
-		std::printf("%c", "Error : OBJ File failed to load.");
+		std::printf("Error : OBJ File failed to load.\n");
 		return false;
 	}
 	std::string linein;
@@ -133,7 +133,7 @@ bool Loader::objLoader(std::string path)
 			std::vector<std::string> vSplit;
 			ss >> split;
 			vSplit.push_back(split);
-			for (int i = 0; i < vSplit.size(); i++)
+			for (unsigned int i = 0; i < vSplit.size(); i++)
 			{
 				FVerts.push_back(ExtractFaceVertexData(vSplit[i]));
 			}
@@ -148,7 +148,7 @@ bool Loader::objLoader(std::string path)
 }
 void Loader::BuildMeshVertAndNormalLists() 
 {
-	for (int i = 0; i < FVerts.size(); i++)
+	for (unsigned int i = 0; i < FVerts.size(); i++)
 	{
 		FaceVertex* vnp = &FVerts[i];
 		if (vnp->Vertex > 0)
@@ -212,7 +212,7 @@ FaceVertex Loader::ExtractFaceVertexData(std::string& s) {
 	int slashPos[2];
 	int slashCount = 0;
 
-	for (int i = 0; i < s.size(); i++)
+	for (unsigned int i = 0; i < s.size(); i++)
 	{
 		if (s[i] == '/') 
 		{

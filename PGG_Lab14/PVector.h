@@ -143,14 +143,14 @@ struct PVector
 	};
 	void  random2D()
 	{
-		x = random(std::rand());
-		y = random(std::rand());
-		z = random(std::rand());
+		x = random((float)std::rand());
+		y = random((float)std::rand());
+		z = random((float)std::rand());
 	}
 	
 	static float random(float seed)
 	{
-		std::srand(seed);
+		std::srand((unsigned int)seed);
 		return (float)std::rand();
 	}
 	static float dist(PVector PV1, PVector PV2)
@@ -172,13 +172,13 @@ struct PVector
 	}
 	float Heading()
 	{
-		float result = atan2(y, x) * 180 / 3.14159265358979323846;
-		return result;
+		double result = atan2(y, x) * 180 / 3.14159265358979323846;
+		return (float)result;
 	}
 	static float radians(float n)
 	{
-		float result = n * 3.14159265358979323846 / 180;
-		return result;
+		double result = n * 3.14159265358979323846 / 180;
+		return (float)result;
 	}
 };
 
